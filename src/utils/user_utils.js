@@ -24,7 +24,7 @@ const getUserInfo = async (user_id) => {
 
 const getUserQuestionBank = async (user_id) => {
 	const { rows } = await pool.query(
-		"SELECT question_bank.question_text, answers.correct_option, answers.option_2, answers.option_3, answers.option_4 FROM question_bank JOIN answers JOIN users ON question_bank.user_id = users.user_id WHERE users.user_id = $1;",
+		"SELECT question_bank.question_text, answers.correct_option, answers.option_2, answers.option_3, answers.option_4 FROM question_bank JOIN answers JOIN users ON question_bank.user_id = users.user_id WHERE users.user_id = $1 RETURNING *;",
 		[user_id]
 	);
 	if (rows) {

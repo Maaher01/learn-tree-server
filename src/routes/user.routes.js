@@ -7,6 +7,6 @@ const {
 const router = Router();
 
 router.post("/", userInfoHandler);
-router.post("/questionbank");
+router.post("/questionbank/:id", userQuestionBankHandler);
 
 module.exports = router;
