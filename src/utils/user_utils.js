@@ -1,40 +1,57 @@
-const { pool } = require("../config/config");
+const { getClient } = require("../config/dbConnection");
 
 const getUserInfo = async (user_id) => {
-	const { rows } = await pool.query(
-		"SELECT users.role, classes.class_name, subjects.subject_name FROM users JOIN class_enrollment ON users.user_id = class_enrollment.user_id JOIN classes ON class_enrollment.class_id = classes.class_id JOIN subject_enrollment ON users.user_id = subject_enrollment.user_id JOIN subjects ON subject_enrollment.subject_id = subjects.subject_id WHERE users.user_id = $1;",
-		[user_id]
-	);
-	if (rows) {
-		return rows;
-	}
-	return null;
+  const client = getClient();
+  const [row] = await client.query(
+    `SELECT 
+		c.class_name, 
+		s.subject_name 
+	FROM 
+		users u 
+	LEFT JOIN 
+		class_enrollment ce ON u.user_id = ce.user_id 
+	LEFT JOIN 
+		classes c ON ce.class_id = c.class_id 
+	LEFT JOIN 
+		subject_enrollment se ON u.user_id = se.user_id 
+	LEFT JOIN 
+		subjects s ON se.subject_id = s.subject_id 
+	WHERE 
+		u.user_id = ?;`,
+    [user_id]
+  );
+  if (row) {
+    return row;
+  }
+  return null;
 };
 
-// const getUserRole = async (user_id) => {
-// 	const { rows } = await pool.query(
-// 		"SELECT role FROM users WHERE user_id=$1;",
-// 		[user_id]
-// 	);
-// 	if (rows) {
-// 		return rows[0];
-// 	}
-// 	return null;
-// };
-
 const getUserQuestionBank = async (user_id) => {
-	const { rows } = await pool.query(
-		"SELECT question_bank.question_text, answers.correct_option, answers.option_2, answers.option_3, answers.option_4 FROM question_bank JOIN answers JOIN users ON question_bank.user_id = users.user_id WHERE users.user_id = $1 RETURNING *;",
-		[user_id]
-	);
-	if (rows) {
-		return rows;
-	}
-	return null;
+  const client = getClient();
+  const [rows] = await client.query(
+    `SELECT 
+		qb.question_text, 
+		a.correct_option, 
+		a.option_2, 
+		a.option_3, 
+		a.option_4 
+	FROM 
+		question_bank qb
+	LEFT JOIN 
+		answers a ON qb.question_id = a.question_id
+	LEFT JOIN 
+		users u ON qb.user_id = u.user_id 
+	WHERE 
+		u.user_id = ?;`,
+    [user_id]
+  );
+  if (rows) {
+    return rows;
+  }
+  return null;
 };
 
 module.exports = {
-	getUserInfo,
-	// getUserRole,
-	getUserQuestionBank,
+  getUserInfo,
+  getUserQuestionBank,
 };

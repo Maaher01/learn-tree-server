@@ -1,12 +1,10 @@
 const { Router } = require("express");
-const {
-	userInfoHandler,
-	userQuestionBankHandler,
-} = require("../controllers/user.controller");
+
+const userController = require("../controllers/user.controller");
 
 const router = Router();
 
-router.post("/", userInfoHandler);
-router.post("/questionbank", userQuestionBankHandler);
+router.get("/userinfo", userController.userInfoHandler);
+router.get("/questionbank", userController.userQuestionBankHandler);
 
 module.exports = router;
