@@ -6,11 +6,10 @@ const { Router } = require("express");
 const router = Router();
 
 router.post(
-  "/register",
-  authController.registerUserHandler,
-  userInputValidator.checkUserRegInput
+	"/register",
+	authController.registerUserHandler,
+	userInputValidator.checkUserRegInput
 );
-router.post("/login", authController.loginUserHandler);
-router.put("/forgot-password", authController.forgotPasswordHandler);
+router.get("/login", authController.loginUserHandler);
 
 module.exports = router;
