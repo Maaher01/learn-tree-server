@@ -19,54 +19,52 @@ const registerUserHandler = async (req, res) => {
     return;
   }
 
-  const bodyData = req.body;
+  const {
+    name,
+    email,
+    password,
+    mobile,
+    birth_date,
+    gender,
+    address,
+    father_name,
+    mother_name,
+    role,
+  } = req.body;
 
   try {
-    const password = bodyData.password;
     const hashedPassword = await hashPassword(password);
 
     let user = await getUser(email);
 
     if (user) {
-      const error = new Error("A user with this email already registered!");
+      const error = new Error("A user with this email is already registered!");
       error.statusCode = 406;
       next(error);
     } else {
+      user = await createUser({
+        name,
+        email,
+        hashedPassword,
+        mobile,
+        birth_date,
+        gender,
+        address,
+        father_name,
+        mother_name,
+        role,
+      });
+      return res.status(200).json({
+        status: "Admin Registration Successfull!",
+        data: user.user_id,
+      });
     }
-
-    user = await createUser({
-      name,
-      email,
-      hashedPassword,
-      mobile,
-      birth_date,
-      gender,
-      address,
-      father_name,
-      mother_name,
-      role,
-    });
-    const userResponse = {
-      id: user.user_id,
-      name: user.name,
-      email: user.email,
-      mobile: user.mobile,
-      birth_date: user.birth_date,
-      gender: user.gender,
-      address: user.address,
-      father_name: user.father_name,
-      mother_name: user.mother_name,
-      role: user.role,
-      entry: user.date_created,
-    };
-    return res
-      .status(200)
-      .json({ status: "Success", data: { user: userResponse } });
   } catch (error) {
-    res.status(500).json({
-      status: "failed",
-      error: "Failed to create user. Please try again later.",
-    });
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong on database operation!";
+    }
+    next(err);
   }
 };
 
