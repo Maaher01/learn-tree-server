@@ -1,5 +1,6 @@
 const authController = require("../controllers/auth.controller");
 const userInputValidator = require("../validation/user");
+const checkUserAuth = require("../middleware/check-user-auth");
 
 const { Router } = require("express");
 
