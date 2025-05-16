@@ -5,7 +5,7 @@
 const express = require("express");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
-const { databaseConnection } = require("./config/dbConnection");
+const { connectToDatabase } = require("./config/dbConnection");
 
 const cors = require("cors");
 const errorHandler = require("./middleware/error-handler");
@@ -59,6 +59,6 @@ app.use(errorHandler.route);
 app.use(errorHandler.next);
 
 app.listen(PORT, async () => {
-	await databaseConnection();
-	console.log(`Server is running on http://localhost:${PORT}`);
+	await connectToDatabase();
+	console.info(`Server is running on http://localhost:${PORT}`);
 });

@@ -1,4 +1,4 @@
-const { pool } = require("../config/config");
+const { pool } = require("../config/dbConnection");
 
 const getUserInfo = async (user_id) => {
 	try {
