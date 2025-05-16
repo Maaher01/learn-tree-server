@@ -1,9 +1,9 @@
-const { getClient } = require("../config/dbConnection");
+const { pool } = require("../config/config");
 
 const getUserInfo = async (user_id) => {
-  const client = getClient();
-  const [row] = await client.query(
-    `SELECT 
+	try {
+		const { rows } = await pool.query(
+			`SELECT 
 		c.class_name, 
 		s.subject_name 
 	FROM 
@@ -17,19 +17,20 @@ const getUserInfo = async (user_id) => {
 	LEFT JOIN 
 		subjects s ON se.subject_id = s.subject_id 
 	WHERE 
-		u.user_id = ?;`,
-    [user_id]
-  );
-  if (row) {
-    return row;
-  }
-  return null;
+		u.user_id = $1;`,
+			[user_id]
+		);
+		return rows.length ? rows : null;
+	} catch (err) {
+		console.error("There was an error fetching user info:", err);
+		throw err;
+	}
 };
 
 const getUserQuestionBank = async (user_id) => {
-  const client = getClient();
-  const [rows] = await client.query(
-    `SELECT 
+	try {
+		const { rows } = await pool.query(
+			`SELECT 
 		qb.question_text, 
 		a.correct_option, 
 		a.option_2, 
@@ -39,19 +40,18 @@ const getUserQuestionBank = async (user_id) => {
 		question_bank qb
 	LEFT JOIN 
 		answers a ON qb.question_id = a.question_id
-	LEFT JOIN 
-		users u ON qb.user_id = u.user_id 
 	WHERE 
-		u.user_id = ?;`,
-    [user_id]
-  );
-  if (rows) {
-    return rows;
-  }
-  return null;
+		qb.user_id = $1;`,
+			[user_id]
+		);
+		return rows.length ? rows : null;
+	} catch (err) {
+		console.error("There was an error fetching user question bank:", err);
+		throw err;
+	}
 };
 
 module.exports = {
-  getUserInfo,
-  getUserQuestionBank,
+	getUserInfo,
+	getUserQuestionBank,
 };

@@ -1,12 +1,10 @@
-const { getClient } = require("../config/dbConnection");
+const { pool } = require("../config/config");
 
 const getUser = async (email) => {
-	const client = getClient();
-	const rows = await client.query("SELECT * FROM users WHERE email=?;", [
+	const { rows } = await pool.query("SELECT * FROM users WHERE email=$1;", [
 		email,
 	]);
 	if (rows) {
-		// console.log(rows[0]);
 		return rows[0];
 	}
 	return null;
@@ -24,9 +22,8 @@ const createUser = async ({
 	mother_name,
 	role,
 }) => {
-	const client = getClient();
-	const row = await client.query(
-		"INSERT INTO users (name, email, password, birth_date, mobile, gender, address, father_name, mother_name, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+	const { rows } = await pool.query(
+		"INSERT INTO users (name, email, password, birth_date, mobile, gender, address, father_name, mother_name, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
 		[
 			name,
 			email,
@@ -40,8 +37,19 @@ const createUser = async ({
 			role,
 		]
 	);
-	if (row) {
-		return row;
+	if (rows) {
+		return rows[0];
+	}
+	return null;
+};
+
+const updateUserPassword = async (email, newPassword) => {
+	const { rows } = await pool.query(
+		"UPDATE users SET password=$1 WHERE email=$2 RETURNING *",
+		[newPassword, email]
+	);
+	if (rows) {
+		return rows[0];
 	}
 	return null;
 };
@@ -49,4 +57,5 @@ const createUser = async ({
 module.exports = {
 	getUser,
 	createUser,
+	updateUserPassword,
 };

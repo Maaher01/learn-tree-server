@@ -1,6 +1,6 @@
 /**
  * NODEJS API
- * DATABASE MYSQL
+ * DATABASE PostgreSQL
  */
 const express = require("express");
 require("dotenv").config();
