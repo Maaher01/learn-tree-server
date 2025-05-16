@@ -1,11 +1,7 @@
 const { hashPassword, comparePassword } = require("../utils/password_utils");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
-const {
-	getUser,
-	createUser,
-	updateUserPassword,
-} = require("../utils/auth_utils");
+const { getUser, createUser } = require("../utils/auth_utils");
 
 const registerUserHandler = async (req, res, next) => {
 	const errors = validationResult(req);
@@ -56,7 +52,7 @@ const registerUserHandler = async (req, res, next) => {
 				role,
 			});
 			return res.status(200).json({
-				status: "Admin Registration Successfull!",
+				status: "User Registration Successfull!",
 				data: user.user_id,
 			});
 		}
@@ -91,7 +87,7 @@ const loginUserHandler = async (req, res, next) => {
 		} else {
 			loadedUser = user;
 
-			const passMatch = await comparePassword(password, user[0].password);
+			const passMatch = await comparePassword(password, user.password);
 
 			if (!passMatch) {
 				const error = new Error("You entered a wrong password!");
