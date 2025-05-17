@@ -1,11 +1,11 @@
 create table users (
 	user_id serial primary key,
 	name varchar(128),
-	email varchar(128),
-	password varchar(128),
+	email varchar(128) unique,
+	password varchar(256),
 	mobile varchar(30),
 	birth_date date,
-	gender varchar(6),
+	gender varchar(10) constraint gender_check check (gender in ('Male', 'Female', 'Others')),
 	address varchar(256),
 	father_name varchar(128),
 	mother_name varchar(128),
@@ -38,19 +38,18 @@ create table subject_enrollment (
 
 create table question_bank (
 	question_id serial primary key,
-	user_id int references users(user_id) on delete cascade,
 	class_id int references classes(class_id) on delete cascade,
 	subject_id int references subjects(subject_id) on delete cascade,
-	question_number int,
 	question_text text,
 	full_marks int
 );
 
-create table answers (
-	answer_id serial primary key,
+create table answer_options (
+	option_id serial primary key,
 	question_id int references question_bank(question_id) on delete cascade,
-	correct_option text,
-	option_2 text,
-	option_3 text,
-	option_4 text
+	option_text text,
+	is_correct boolean
 );
+create unique index one_correct_option_per_question on answer_options(question_id) where is_correct = true;
+create index idx_answer_options_question_id on answer_options(question_id);
+

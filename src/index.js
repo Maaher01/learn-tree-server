@@ -19,7 +19,6 @@ const { logger } = require("./middleware/logEvents");
  *  Router File Import
  */
 const authRouter = require("./routes/auth.routes");
-const userRouter = require("./routes/user.routes");
 
 /**
  * MAIN APP CONFIG
@@ -39,7 +38,6 @@ app.use(allowCross);
  * MAIN BASE ROUTER WITH IMPORTED ROUTES
  */
 app.use("/api/auth", authRouter);
-app.use("/api/user", userRouter);
 
 /**
  * MAIN BASE GET PATH

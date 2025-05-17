@@ -43,19 +43,7 @@ const createUser = async ({
 	return null;
 };
 
-const updateUserPassword = async (email, newPassword) => {
-	const { rows } = await pool.query(
-		"UPDATE users SET password=$1 WHERE email=$2 RETURNING *",
-		[newPassword, email]
-	);
-	if (rows) {
-		return rows[0];
-	}
-	return null;
-};
-
 module.exports = {
 	getUser,
 	createUser,
-	updateUserPassword,
 };
