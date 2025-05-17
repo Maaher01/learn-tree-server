@@ -59,7 +59,7 @@ const registerUserHandler = async (req, res, next) => {
 	} catch (err) {
 		if (!err.statusCode) {
 			err.statusCode = 500;
-			err.message = "Something went wrong on database operation!";
+			err.message = "Something went wrong in the database operation!";
 		}
 		next(err);
 	}
