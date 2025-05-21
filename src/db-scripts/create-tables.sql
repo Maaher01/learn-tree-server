@@ -1,16 +1,11 @@
 create table users (
 	user_id serial primary key,
-	name varchar(128),
+	fullname varchar(128),
 	email varchar(128) unique,
 	password varchar(256),
 	mobile varchar(30),
-	birth_date date,
-	gender varchar(10) constraint gender_check check (gender in ('Male', 'Female', 'Others')),
-	address varchar(256),
-	father_name varchar(128),
-	mother_name varchar(128),
+	refreshToken text,
 	role varchar(10),
-	date_created timestamp not null default now()
 );
 
 create table classes (

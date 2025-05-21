@@ -1,49 +1,45 @@
 const { pool } = require("../config/dbConnection");
 
 const getUser = async (email) => {
-  const { rows } = await pool.query("SELECT * FROM users WHERE email=$1;", [
-    email,
-  ]);
-  if (rows) {
-    return rows[0];
-  }
-  return null;
+	const { rows } = await pool.query("SELECT * FROM users WHERE email=$1;", [
+		email,
+	]);
+	if (rows) {
+		return rows[0];
+	}
+	return null;
 };
 
 const createUser = async ({
-  name,
-  email,
-  hashedPassword: password,
-  mobile,
-  birth_date,
-  gender,
-  address,
-  father_name,
-  mother_name,
-  role,
+	fullname,
+	email,
+	hashedPassword: password,
+	mobile,
+	role,
 }) => {
-  const { rows } = await pool.query(
-    "INSERT INTO users (name, email, password, birth_date, mobile, gender, address, father_name, mother_name, role) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *",
-    [
-      name,
-      email,
-      password,
-      birth_date,
-      mobile,
-      gender,
-      address,
-      father_name,
-      mother_name,
-      role,
-    ]
-  );
-  if (rows) {
-    return rows[0];
-  }
-  return null;
+	const { rows } = await pool.query(
+		"INSERT INTO users (fullname, email, password, mobile, role) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+		[fullname, email, password, mobile, role]
+	);
+	if (rows) {
+		return rows[0];
+	}
+	return null;
+};
+
+const saveRefreshToken = async (user_id, refreshtoken) => {
+	const { rows } = await pool.query(
+		"UPDATE users SET refreshtoken=$1 WHERE user_id=$2;",
+		[refreshtoken, user_id]
+	);
+	if (rows) {
+		return rows[0];
+	}
+	return null;
 };
 
 module.exports = {
-  getUser,
-  createUser,
+	getUser,
+	createUser,
+	saveRefreshToken,
 };
