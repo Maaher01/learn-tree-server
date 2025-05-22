@@ -8,8 +8,10 @@ const router = Router();
 router.post(
   "/register",
   userInputValidator.checkUserRegInput,
-  authController.registerUserHandler
+  authController.userRegistration
 );
-router.get("/login", authController.loginUserHandler);
+router.get("/login", authController.userLogin);
+router.post("/logout", authController.userLogout);
+router.get("/refreshtoken", authController.userRefreshToken);
 
 module.exports = router;

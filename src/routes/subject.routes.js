@@ -1,4 +1,4 @@
-const classController = require("../controllers/class.controller");
+const subjectController = require("../controllers/subject.controller");
 const checkAdminAuth = require("../middleware/check-admin-auth");
 const checkUserAuth = require("../middleware/check-user-auth");
 
@@ -7,10 +7,16 @@ const { Router } = require("express");
 const router = Router();
 
 router.post(
-  "/create-class",
+  "/create-subject",
   checkUserAuth,
   checkAdminAuth,
-  classController.classCreate
+  subjectController.subjectCreate
+);
+router.delete(
+  "/delete-subject/:subject_id",
+  checkUserAuth,
+  checkAdminAuth,
+  subjectController.deleteSubject
 );
 
 module.exports = router;
