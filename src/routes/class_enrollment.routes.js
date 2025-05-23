@@ -1,19 +1,19 @@
 const classEnrollmentController = require("../controllers/class_enrollment.controller");
-const checkUserAuth = require("../middleware/check-user-auth");
+const checkAdminAuth = require("../middleware/check-admin-auth");
 
 const { Router } = require("express");
 
 const router = Router();
 
 router.post(
-  "/create-class-enrollment",
-  checkUserAuth,
-  classEnrollmentController.classEnrollmentCreate
+	"/create-class-enrollment",
+	checkAdminAuth,
+	classEnrollmentController.classEnrollmentCreate
 );
 router.delete(
-  "/delete-class-enrollment",
-  checkUserAuth,
-  classEnrollmentController.classEnrollmentDelete
+	"/delete-class-enrollment/:class_id/:user_id",
+	checkAdminAuth,
+	classEnrollmentController.classEnrollmentDelete
 );
 
 module.exports = router;

@@ -1,16 +1,10 @@
 const classController = require("../controllers/class.controller");
 const checkAdminAuth = require("../middleware/check-admin-auth");
-const checkUserAuth = require("../middleware/check-user-auth");
 
 const { Router } = require("express");
 
 const router = Router();
 
-router.post(
-  "/create-class",
-  checkUserAuth,
-  checkAdminAuth,
-  classController.classCreate
-);
+router.post("/create-class", checkAdminAuth, classController.classCreate);
 
 module.exports = router;

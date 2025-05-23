@@ -31,20 +31,19 @@ create table subject_enrollment (
 	primary key (subject_id, user_id)
 );
 
-create table question_bank (
+create table questions (
 	question_id serial primary key,
 	class_id int references classes(class_id) on delete cascade,
 	subject_id int references subjects(subject_id) on delete cascade,
-	question_text text,
-	full_marks int
+	question_text text not null,
+	full_marks int not null
 );
 
 create table answer_options (
 	option_id serial primary key,
-	question_id int references question_bank(question_id) on delete cascade,
-	option_text text,
-	is_correct boolean
+	question_id int references questions(question_id) on delete cascade,
+	option_text text not null,
+	is_correct boolean not null
 );
 create unique index one_correct_option_per_question on answer_options(question_id) where is_correct = true;
 create index idx_answer_options_question_id on answer_options(question_id);
-
