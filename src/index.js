@@ -24,6 +24,7 @@ const classEnrollmentRouter = require("./routes/class_enrollment.routes");
 const subjectRouter = require("./routes/subject.routes");
 const subjectEnrollmentRouter = require("./routes/subject_enrollment.routes");
 const questionRouter = require("./routes/question.routes");
+const answerOptionRouter = require("./routes/answer_option.routes");
 
 /**
  * MAIN APP CONFIG
@@ -48,6 +49,7 @@ app.use("/api/class-enrollment", classEnrollmentRouter);
 app.use("/api/subject", subjectRouter);
 app.use("/api/subject-enrollment", subjectEnrollmentRouter);
 app.use("/api/question", questionRouter);
+app.use("/api/answer-option", answerOptionRouter);
 
 /**
  * MAIN BASE GET PATH
