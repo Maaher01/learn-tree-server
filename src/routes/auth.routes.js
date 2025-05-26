@@ -6,11 +6,11 @@ const { Router } = require("express");
 const router = Router();
 
 router.post(
-  "/register",
-  userInputValidator.checkUserRegInput,
-  authController.userRegistration
+	"/register",
+	userInputValidator.checkUserRegInput,
+	authController.userRegistration
 );
-router.get("/login", authController.userLogin);
+router.post("/login", authController.userLogin);
 router.post("/logout", authController.userLogout);
 router.get("/refreshtoken", authController.userRefreshToken);
 

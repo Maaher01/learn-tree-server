@@ -31,7 +31,7 @@ const answerOptionRouter = require("./routes/answer_option.routes");
  */
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 //Middlewares
 app.use(cors(corsOptions));
