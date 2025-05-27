@@ -10,7 +10,6 @@ const { connectToDatabase } = require("./config/dbConnection");
 const cors = require("cors");
 const errorHandler = require("./middleware/error-handler");
 const corsOptions = require("./config/corsOptions");
-const { allowCross } = require("./middleware/cors-unblocker");
 
 // Logger
 const { logger } = require("./middleware/logEvents");
@@ -38,7 +37,6 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
-app.use(allowCross);
 
 /**
  * MAIN BASE ROUTER WITH IMPORTED ROUTES
@@ -55,11 +53,11 @@ app.use("/api/answer-option", answerOptionRouter);
  * MAIN BASE GET PATH
  */
 app.get("/", (req, res) => {
-	res.send(
-		`<div style="width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
+  res.send(
+    `<div style="width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
 			<h1 style="color: blueviolet">API RUNNING...</h1>
 		</div>`
-	);
+  );
 });
 
 /**
@@ -69,6 +67,6 @@ app.use(errorHandler.notFoundHandler);
 app.use(errorHandler.globalErrorHandler);
 
 app.listen(PORT, async () => {
-	await connectToDatabase();
-	console.info(`Server is running on http://localhost:${PORT}`);
+  await connectToDatabase();
+  console.info(`Server is running on http://localhost:${PORT}`);
 });
