@@ -9,7 +9,7 @@ const { connectToDatabase } = require("./config/dbConnection");
 
 const cors = require("cors");
 const errorHandler = require("./middleware/error-handler");
-const corsOptions = require("./config/corsOptions");
+const { corsOptions } = require("./config/corsOptions");
 
 // Logger
 const { logger } = require("./middleware/logEvents");
