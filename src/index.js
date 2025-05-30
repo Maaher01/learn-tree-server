@@ -24,6 +24,7 @@ const subjectRouter = require("./routes/subject.routes");
 const subjectEnrollmentRouter = require("./routes/subject_enrollment.routes");
 const questionRouter = require("./routes/question.routes");
 const answerOptionRouter = require("./routes/answer_option.routes");
+const { allowCross } = require("./middleware/cross-unblocker");
 
 /**
  * MAIN APP CONFIG
@@ -34,6 +35,7 @@ const PORT = process.env.PORT;
 
 //Middlewares
 app.use(cors(corsOptions));
+app.use(allowCross);
 app.use(express.json());
 app.use(cookieParser());
 app.use(logger);
@@ -53,11 +55,11 @@ app.use("/api/answer-option", answerOptionRouter);
  * MAIN BASE GET PATH
  */
 app.get("/", (req, res) => {
-  res.send(
-    `<div style="width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
+	res.send(
+		`<div style="width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center">
 			<h1 style="color: blueviolet">API RUNNING...</h1>
 		</div>`
-  );
+	);
 });
 
 /**
@@ -67,6 +69,6 @@ app.use(errorHandler.notFoundHandler);
 app.use(errorHandler.globalErrorHandler);
 
 app.listen(PORT, async () => {
-  await connectToDatabase();
-  console.info(`Server is running on http://localhost:${PORT}`);
+	await connectToDatabase();
+	console.info(`Server is running on http://localhost:${PORT}`);
 });

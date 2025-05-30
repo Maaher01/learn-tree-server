@@ -1,36 +1,27 @@
 const jwt = require("jsonwebtoken");
 
 module.exports = (req, res, next) => {
-	const authHeader = req.get("Authorization");
+	const token = req.cookies.accessToken;
 
-	if (!authHeader) {
-		const error = new Error("Unauthorized: No token provided");
-		error.statusCode = 401;
-		throw error;
+	if (!token) {
+		return res.status(401).json({ message: "Unauthorized: No token provided" });
 	}
-
-	const token = authHeader.split(" ")[1];
-
-	let decodedToken;
 
 	try {
-		decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+		const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+		if (!decodedToken || decodedToken.UserInfo.role !== "Admin") {
+			return res.status(403).json({ message: "Access denied! admins only!" });
+		}
+
+		req.adminData = {
+			fullname: decodedToken.UserInfo.fullname,
+			email: decodedToken.UserInfo.email,
+			userId: decodedToken.UserInfo.userId,
+		};
+
+		next();
 	} catch (err) {
-		err.statusCode = 403;
-		throw error;
+		return res.status(403).json({ message: "Invalid or expired token" });
 	}
-
-	if (!decodedToken || decodedToken.UserInfo.role !== "Admin") {
-		const error = new Error("Access denied. Admins only.");
-		error.statusCode = 403;
-		throw error;
-	}
-
-	req.adminData = {
-		fullname: decodedToken.UserInfo.fullname,
-		email: decodedToken.UserInfo.email,
-		userId: decodedToken.UserInfo.user_id,
-	};
-
-	next();
 };

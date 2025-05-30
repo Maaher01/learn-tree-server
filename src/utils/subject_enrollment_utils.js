@@ -26,9 +26,9 @@ const getAllEnrolledSubjectsByUser = async (user_id) => {
 	const { rows } = await pool.query(
 		`SELECT s.subject_name, c.class_name 
         FROM users u 
-        LEFT JOIN subject_enrollment se ON u.user_id = se.user_id
-        LEFT JOIN subjects s ON se.subject_id = s.subject_id
-        LEFT JOIN classes c ON s.class_id = c.class_id
+        JOIN subject_enrollment se ON u.user_id = se.user_id
+        JOIN subjects s ON se.subject_id = s.subject_id
+        JOIN classes c ON s.class_id = c.class_id
         WHERE u.user_id=$1;`,
 		[user_id]
 	);
