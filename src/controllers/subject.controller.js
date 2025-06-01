@@ -24,10 +24,10 @@ exports.subjectCreate = async (req, res, next) => {
 };
 
 exports.subjectDetailsGet = async (req, res, next) => {
-  const { subject_id } = req.params;
+  const { class_id, subject_id } = req.params;
 
   try {
-    const subject = await getSubjectDetails(subject_id);
+    const subject = await getSubjectDetails(class_id, subject_id);
 
     return res.status(200).json({
       status: "Success",

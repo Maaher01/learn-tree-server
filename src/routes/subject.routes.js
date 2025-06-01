@@ -8,12 +8,12 @@ const router = Router();
 
 router.post("/create-subject", checkAdminAuth, subjectController.subjectCreate);
 router.get(
-  "/get-subject-details/:subject_id",
+  "/get-subject-details/:class_id/:subject_id",
   checkUserAuth,
   subjectController.subjectDetailsGet
 );
 router.delete(
-  "/delete-subject/:subject_id",
+  "/delete-subject/:class_id/:subject_id",
   checkAdminAuth,
   subjectController.subjectDelete
 );

@@ -24,7 +24,7 @@ const deleteSubjectEnrollment = async (subject_id, user_id) => {
 
 const getAllEnrolledSubjectsByUser = async (user_id) => {
   const { rows } = await pool.query(
-    `SELECT s.subject_name, c.class_name, s.subject_id 
+    `SELECT s.subject_name, c.class_name, s.subject_id, c.class_id 
         FROM users u 
         JOIN subject_enrollment se ON u.user_id = se.user_id
         JOIN subjects s ON se.subject_id = s.subject_id

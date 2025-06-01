@@ -11,13 +11,13 @@ const createSubject = async (subject_name, class_id) => {
   return null;
 };
 
-const getSubjectDetails = async (subject_id) => {
+const getSubjectDetails = async (subject_id, class_id) => {
   const { rows } = await pool.query(
     `SELECT s.subject_name, c.class_name
 		FROM subjects s
 		JOIN classes c ON s.class_id = c.class_id
-		WHERE s.subject_id=$1;`,
-    [subject_id]
+		WHERE c.class_id=$1 AND s.subject_id=$2;`,
+    [class_id, subject_id]
   );
   if (rows) {
     return rows[0];
