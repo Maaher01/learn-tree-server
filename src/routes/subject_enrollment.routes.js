@@ -21,7 +21,7 @@ router.get(
 	subjectEnrollmentController.AllEnrolledSubjectsByUserGet
 );
 router.get(
-	"/get-all-students/:subject_id",
+	"/get-all-people/:subject_id",
 	checkUserAuth,
 	subjectEnrollmentController.AllEnrolledStudentsBySubjectGet
 );
