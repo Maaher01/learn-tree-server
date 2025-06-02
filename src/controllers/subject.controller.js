@@ -2,6 +2,7 @@ const {
   createSubject,
   deleteSubject,
   getSubjectDetails,
+  getSubjectsByClass,
 } = require("../utils/subject_utils");
 
 exports.subjectCreate = async (req, res, next) => {
@@ -64,6 +65,26 @@ exports.subjectDelete = async (req, res, next) => {
     if (!err.statusCode) {
       err.statusCode = 500;
       err.message = "Something went wrong in the database operation!";
+    }
+    next(err);
+  }
+};
+
+exports.getSubjectsByClass = async (req, res, next) => {
+  const { class_id } = req.params;
+
+  try {
+    const subjects = await getSubjectsByClass(class_id);
+
+    return res.status(200).json({
+      status: "Success",
+      message: "Fetched all subjects successfully!",
+      data: subjects,
+    });
+  } catch (err) {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+      err.message = "Something went wrong in the database operation";
     }
     next(err);
   }

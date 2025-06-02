@@ -12,6 +12,11 @@ router.get(
   checkUserAuth,
   subjectController.subjectDetailsGet
 );
+router.get(
+  "/get-subjects-by-class/:class_id",
+  checkUserAuth,
+  subjectController.getSubjectsByClass
+);
 router.delete(
   "/delete-subject/:class_id/:subject_id",
   checkAdminAuth,
