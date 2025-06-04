@@ -47,3 +47,11 @@ create table answer_options (
 );
 create unique index one_correct_option_per_question on answer_options(question_id) where is_correct = true;
 create index idx_answer_options_question_id on answer_options(question_id);
+
+create table posts (
+	post_id serial primary key,
+	post_text text not null,
+	user_id int references users(user_id) on delete cascade,
+	class_id int references classes(class_id) on delete cascade,
+	subject_id int references subjects(subject_id) on delete cascade
+);
