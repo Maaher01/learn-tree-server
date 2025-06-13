@@ -6,3 +6,6 @@ node_modules
 
 # Log Folder
 logs
+
+# Uploads Folder
+uploads

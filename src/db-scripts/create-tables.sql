@@ -3,7 +3,7 @@ create table users (
 	fullname varchar(128),
 	email varchar(128) unique,
 	password varchar(256),
-	mobile varchar(30),
+	image varchar(256),
 	refreshToken text,
 	role varchar(10),
 );
@@ -53,5 +53,28 @@ create table posts (
 	post_text text not null,
 	user_id int references users(user_id) on delete cascade,
 	class_id int references classes(class_id) on delete cascade,
-	subject_id int references subjects(subject_id) on delete cascade
+	subject_id int references subjects(subject_id) on delete cascade,
+	created_at timestamp not null default now(),
+	updated_at timestamp not null default now()
+);
+
+CREATE OR REPLACE FUNCTION trigger_set_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_timestamp
+BEFORE UPDATE ON posts
+FOR EACH ROW
+EXECUTE FUNCTION trigger_set_timestamp();
+
+create table post_comments (
+	comment_id serial primary key,
+	comment_text text not null,
+	post_id int references posts(post_id) on delete cascade,
+	user_id int references users(user_id) on delete cascade,
+	created_at timestamp not null default now()
 );

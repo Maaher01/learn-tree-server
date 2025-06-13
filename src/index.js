@@ -4,13 +4,22 @@
  */
 const express = require("express");
 require("dotenv").config();
+const FileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const { connectToDatabase } = require("./config/dbConnection");
+const path = require("path");
 
+/**
+ *  CORS Configuration
+ */
 const cors = require("cors");
-const errorHandler = require("./middleware/error-handler");
 const { corsOptions } = require("./config/corsOptions");
 
+/**
+ *  Middleware File Import
+ */
+const errorHandler = require("./middleware/error-handler");
+const { allowCross } = require("./middleware/cross-unblocker");
 // Logger
 const { logger } = require("./middleware/logEvents");
 
@@ -24,7 +33,8 @@ const subjectRouter = require("./routes/subject.routes");
 const subjectEnrollmentRouter = require("./routes/subject_enrollment.routes");
 const questionRouter = require("./routes/question.routes");
 const answerOptionRouter = require("./routes/answer_option.routes");
-const { allowCross } = require("./middleware/cross-unblocker");
+const postRouter = require("./routes/post.routes");
+const postCommentRouter = require("./routes/post_comment.routes");
 
 /**
  * MAIN APP CONFIG
@@ -38,7 +48,9 @@ app.use(cors(corsOptions));
 app.use(allowCross);
 app.use(express.json());
 app.use(cookieParser());
-app.use(logger);
+// app.use(logger);
+app.use(FileUpload());
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 /**
  * MAIN BASE ROUTER WITH IMPORTED ROUTES
@@ -50,6 +62,8 @@ app.use("/api/subject", subjectRouter);
 app.use("/api/subject-enrollment", subjectEnrollmentRouter);
 app.use("/api/question", questionRouter);
 app.use("/api/answer-option", answerOptionRouter);
+app.use("/api/post", postRouter);
+app.use("/api/post-comment", postCommentRouter);
 
 /**
  * MAIN BASE GET PATH

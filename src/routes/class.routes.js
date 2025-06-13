@@ -1,5 +1,5 @@
 const classController = require("../controllers/class.controller");
-const checkAdminAuth = require("../middleware/check-admin-auth");
+const checkRoleAuth = require("../middleware/check-role-auth");
 const checkUserAuth = require("../middleware/check-user-auth");
 
 const { Router } = require("express");
@@ -7,6 +7,10 @@ const { Router } = require("express");
 const router = Router();
 
 router.get("/get-all-classes", checkUserAuth, classController.allClassesGet);
-router.post("/create-class", checkAdminAuth, classController.classCreate);
+router.post(
+	"/create-class",
+	checkRoleAuth("Teacher"),
+	classController.classCreate
+);
 
 module.exports = router;

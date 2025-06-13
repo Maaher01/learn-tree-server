@@ -1,19 +1,19 @@
 const questionController = require("../controllers/question.controller");
-const checkAdminAuth = require("../middleware/check-admin-auth");
+const checkRoleAuth = require("../middleware/check-role-auth");
 
 const Router = require("express");
 
 const router = Router();
 
 router.post(
-  "/create-question",
-  checkAdminAuth,
-  questionController.questionCreate
+	"/create-question",
+	checkRoleAuth("Teacher"),
+	questionController.questionCreate
 );
 router.get(
-  "/get-all-questions-by-class-subject/:class_id/:subject_id",
-  checkAdminAuth,
-  questionController.getAllQuestionAndAnswersByClassAndSubject
+	"/get-all-questions-by-class-subject/:class_id/:subject_id",
+	checkRoleAuth("Teacher"),
+	questionController.getAllQuestionAndAnswersByClassAndSubject
 );
 
 module.exports = router;

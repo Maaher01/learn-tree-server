@@ -1,5 +1,5 @@
 const classEnrollmentController = require("../controllers/class_enrollment.controller");
-const checkAdminAuth = require("../middleware/check-admin-auth");
+const checkRoleAuth = require("../middleware/check-role-auth");
 
 const { Router } = require("express");
 
@@ -7,12 +7,12 @@ const router = Router();
 
 router.post(
 	"/create-class-enrollment",
-	checkAdminAuth,
+	checkRoleAuth("Teacher"),
 	classEnrollmentController.classEnrollmentCreate
 );
 router.delete(
 	"/delete-class-enrollment/:class_id/:user_id",
-	checkAdminAuth,
+	checkRoleAuth("Teacher"),
 	classEnrollmentController.classEnrollmentDelete
 );
 
